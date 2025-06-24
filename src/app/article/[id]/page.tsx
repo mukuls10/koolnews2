@@ -3,15 +3,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-interface Props {
-  params: {
-    id: string;
-  };
+type Props = {
+  params: Promise<{ id: string }>;
   searchParams: { [key: string]: string | string[] | undefined };
-}
+};
 
 export default async function ArticlePage({ params }: Props) {
-  const article = articles.find((a) => a.id === params.id);
+  const resolvedParams = await params;
+  const article = articles.find((a) => a.id === resolvedParams.id);
 
   if (!article) {
     notFound();
